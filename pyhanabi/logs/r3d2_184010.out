@@ -1,0 +1,67 @@
+/bin/bash: /h/u9/c1/00/lijiax50/miniconda3/envs/r3d3_hanabi/lib/libtinfo.so.6: no version information available (required by /bin/bash)
+
+A module that was compiled using NumPy 1.x cannot be run in
+NumPy 2.0.2 as it may crash. To support both 1.x and 2.x
+versions of NumPy, modules must be compiled with NumPy 2.0.
+Some module may need to rebuild instead e.g. with 'pybind11>=2.12'.
+
+If you are a user of the module, the easiest solution will be to
+downgrade to 'numpy<2' or try to upgrade the affected module.
+We expect that some modules will need time to support NumPy 2.
+
+Traceback (most recent call last):  File "/h/u9/c1/00/lijiax50/Documents/R3D2/pyhanabi/r3d2_main.py", line 439, in <module>
+    train(args)
+  File "/h/u9/c1/00/lijiax50/Documents/R3D2/pyhanabi/r3d2_main.py", line 119, in train
+    common_utils.set_all_seeds(args.seed)
+  File "/h/u9/c1/00/lijiax50/Documents/R3D2/pyhanabi/common_utils/helper.py", line 181, in set_all_seeds
+    torch.manual_seed(rand_seed + 2)
+  File "/h/u9/c1/00/lijiax50/miniconda3/envs/r3d3_hanabi/lib/python3.9/site-packages/torch/random.py", line 46, in manual_seed
+    return default_generator.manual_seed(seed)
+/h/u9/c1/00/lijiax50/miniconda3/envs/r3d3_hanabi/lib/python3.9/site-packages/torch/random.py:46: UserWarning: Failed to initialize NumPy: _ARRAY_API not found (Triggered internally at ../torch/csrc/utils/tensor_numpy.cpp:84.)
+  return default_generator.manual_seed(seed)
+/h/u9/c1/00/lijiax50/miniconda3/envs/r3d3_hanabi/lib/python3.9/site-packages/huggingface_hub/file_download.py:943: FutureWarning: `resume_download` is deprecated and will be removed in version 1.0.0. Downloads always resume when possible. If you want to force a new download, use `force_download=True`.
+  warnings.warn(
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - Loaded Tokenizer - 
+
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+[W graph_fuser.cpp:104] Warning: operator() profile_node %522 : int[] = prim::profile_ivalue(%520)
+ does not have profile information (function operator())
+slurmstepd-squid01: error: *** JOB 184010 ON squid01 CANCELLED AT 2025-06-10T20:00:34 ***

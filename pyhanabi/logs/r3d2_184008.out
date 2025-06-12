@@ -1,0 +1,127 @@
+/bin/bash: /h/u9/c1/00/lijiax50/miniconda3/envs/r3d3_hanabi/lib/libtinfo.so.6: no version information available (required by /bin/bash)
+
+EnvironmentNameNotFound: Could not find conda environment: r3d_hanabi
+You can list all discoverable environments with `conda info --envs`.
+
+
+
+A module that was compiled using NumPy 1.x cannot be run in
+NumPy 2.0.2 as it may crash. To support both 1.x and 2.x
+versions of NumPy, modules must be compiled with NumPy 2.0.
+Some module may need to rebuild instead e.g. with 'pybind11>=2.12'.
+
+If you are a user of the module, the easiest solution will be to
+downgrade to 'numpy<2' or try to upgrade the affected module.
+We expect that some modules will need time to support NumPy 2.
+
+Traceback (most recent call last):  File "/h/u9/c1/00/lijiax50/Documents/R3D2/pyhanabi/r3d2_main.py", line 439, in <module>
+    train(args)
+  File "/h/u9/c1/00/lijiax50/Documents/R3D2/pyhanabi/r3d2_main.py", line 119, in train
+    common_utils.set_all_seeds(args.seed)
+  File "/h/u9/c1/00/lijiax50/Documents/R3D2/pyhanabi/common_utils/helper.py", line 181, in set_all_seeds
+    torch.manual_seed(rand_seed + 2)
+  File "/h/u9/c1/00/lijiax50/miniconda3/envs/r3d3_hanabi/lib/python3.9/site-packages/torch/random.py", line 46, in manual_seed
+    return default_generator.manual_seed(seed)
+/h/u9/c1/00/lijiax50/miniconda3/envs/r3d3_hanabi/lib/python3.9/site-packages/torch/random.py:46: UserWarning: Failed to initialize NumPy: _ARRAY_API not found (Triggered internally at ../torch/csrc/utils/tensor_numpy.cpp:84.)
+  return default_generator.manual_seed(seed)
+/h/u9/c1/00/lijiax50/miniconda3/envs/r3d3_hanabi/lib/python3.9/site-packages/huggingface_hub/file_download.py:943: FutureWarning: `resume_download` is deprecated and will be removed in version 1.0.0. Downloads always resume when possible. If you want to force a new download, use `force_download=True`.
+  warnings.warn(
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+[W graph_fuser.cpp:104] Warning: operator() profile_node %522 : int[] = prim::profile_ivalue(%520)
+ does not have profile information (function operator())
+terminate called after throwing an instance of 'std::runtime_error'
+  what():  The following operation failed in the TorchScript interpreter.
+Traceback of TorchScript (most recent call last):
+  File "/h/u9/c1/00/lijiax50/Documents/R3D2/pyhanabi/r2d2.py", line 214, in act
+            )
+        else:
+            greedy_action, new_hid, extra = self.greedy_act(
+                                            ~~~~~~~~~~~~~~~ <--- HERE
+                priv_s, publ_s, legal_move.to(self.device), hid
+            )
+  File "/h/u9/c1/00/lijiax50/Documents/R3D2/pyhanabi/r2d2.py", line 148, in greedy_act
+        hid: Dict[str, torch.Tensor],
+    ) -> Tuple[torch.Tensor, Dict[str, torch.Tensor], Dict[str, torch.Tensor]]:
+        adv, new_hid = self.online_net.act(priv_s, publ_s, hid)
+                       ~~~~~~~~~~~~~~~~~~~ <--- HERE
+        legal_adv = (1 + adv - adv.min()) * legal_move[:, : adv.shape[1]]
+        greedy_action = legal_adv.argmax(1).detach()
+  File "/h/u9/c1/00/lijiax50/Documents/R3D2/pyhanabi/q_net.py", line 620, in act
+    
+        with torch.no_grad():
+            x = self.call_transformer(priv_s)
+                ~~~~~~~~~~~~~~~~~~~~~ <--- HERE
+            x = x["last_hidden_state"].mean(dim=1).unsqueeze(0)
+            o, (h, c) = self.state_lstm(
+/h/u9/c1/00/lijiax50/miniconda3/envs/r3d3_hanabi/lib/python3.9/site-packages/transformers/models/bert/modeling_bert.py(325): forward
+/h/u9/c1/00/lijiax50/miniconda3/envs/r3d3_hanabi/lib/python3.9/site-packages/torch/nn/modules/module.py(1488): _slow_forward
+/h/u9/c1/00/lijiax50/miniconda3/envs/r3d3_hanabi/lib/python3.9/site-packages/torch/nn/modules/module.py(1501): _call_impl
+/h/u9/c1/00/lijiax50/miniconda3/envs/r3d3_hanabi/lib/python3.9/site-packages/transformers/models/bert/modeling_bert.py(427): forward
+/h/u9/c1/00/lijiax50/miniconda3/envs/r3d3_hanabi/lib/python3.9/site-packages/torch/nn/modules/module.py(1488): _slow_forward
+/h/u9/c1/00/lijiax50/miniconda3/envs/r3d3_hanabi/lib/python3.9/site-packages/torch/nn/modules/module.py(1501): _call_impl
+/h/u9/c1/00/lijiax50/miniconda3/envs/r3d3_hanabi/lib/python3.9/site-packages/transformers/models/bert/modeling_bert.py(497): forward
+/h/u9/c1/00/lijiax50/miniconda3/envs/r3d3_hanabi/lib/python3.9/site-packages/torch/nn/modules/module.py(1488): _slow_forward
+/h/u9/c1/00/lijiax50/miniconda3/envs/r3d3_hanabi/lib/python3.9/site-packages/torch/nn/modules/module.py(1501): _call_impl
+/h/u9/c1/00/lijiax50/miniconda3/envs/r3d3_hanabi/lib/python3.9/site-packages/transformers/models/bert/modeling_bert.py(612): forward
+/h/u9/c1/00/lijiax50/miniconda3/envs/r3d3_hanabi/lib/python3.9/site-packages/torch/nn/modules/module.py(1488): _slow_forward
+/h/u9/c1/00/lijiax50/miniconda3/envs/r3d3_hanabi/lib/python3.9/site-packages/torch/nn/modules/module.py(1501): _call_impl
+/h/u9/c1/00/lijiax50/miniconda3/envs/r3d3_hanabi/lib/python3.9/site-packages/transformers/models/bert/modeling_bert.py(1022): forward
+/h/u9/c1/00/lijiax50/miniconda3/envs/r3d3_hanabi/lib/python3.9/site-packages/torch/nn/modules/module.py(1488): _slow_forward
+/h/u9/c1/00/lijiax50/miniconda3/envs/r3d3_hanabi/lib/python3.9/site-packages/torch/nn/modules/module.py(1501): _call_impl
+/h/u9/c1/00/lijiax50/miniconda3/envs/r3d3_hanabi/lib/python3.9/site-packages/torch/jit/_trace.py(1056): trace_module
+/h/u9/c1/00/lijiax50/miniconda3/envs/r3d3_hanabi/lib/python3.9/site-packages/torch/jit/_trace.py(794): trace
+/h/u9/c1/00/lijiax50/Documents/R3D2/pyhanabi/q_net.py(579): load_transformers
+/h/u9/c1/00/lijiax50/Documents/R3D2/pyhanabi/q_net.py(506): __init__
+/h/u9/c1/00/lijiax50/miniconda3/envs/r3d3_hanabi/lib/python3.9/site-packages/torch/jit/_script.py(292): init_then_script
+/h/u9/c1/00/lijiax50/Documents/R3D2/pyhanabi/r2d2.py(44): __init__
+/h/u9/c1/00/lijiax50/miniconda3/envs/r3d3_hanabi/lib/python3.9/site-packages/torch/jit/_script.py(292): init_then_script
+/h/u9/c1/00/lijiax50/Documents/R3D2/pyhanabi/r2d2.py(116): clone
+/h/u9/c1/00/lijiax50/Documents/R3D2/pyhanabi/create.py(69): __init__
+/h/u9/c1/00/lijiax50/Documents/R3D2/pyhanabi/create.py(93): create_model_runners
+/h/u9/c1/00/lijiax50/Documents/R3D2/pyhanabi/create.py(108): __init__
+/h/u9/c1/00/lijiax50/Documents/R3D2/pyhanabi/create.py(141): __init__
+/h/u9/c1/00/lijiax50/Documents/R3D2/pyhanabi/r3d2_main.py(234): train
+/h/u9/c1/00/lijiax50/Documents/R3D2/pyhanabi/r3d2_main.py(439): <module>
+RuntimeError: CUDA out of memory. Tried to allocate 1.23 GiB (GPU 0; 19.57 GiB total capacity; 18.40 GiB already allocated; 865.31 MiB free; 18.46 GiB reserved in total by PyTorch) If reserved memory is >> allocated memory try setting max_split_size_mb to avoid fragmentation.  See documentation for Memory Management and PYTORCH_CUDA_ALLOC_CONF
+
+/var/spool/slurmd/job184008/slurm_script: line 20: 45033 Aborted                 python r3d2_main.py --config configs/r3d2.yaml

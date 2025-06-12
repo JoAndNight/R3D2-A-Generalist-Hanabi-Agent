@@ -1,0 +1,14 @@
+/bin/bash: /h/u9/c1/00/lijiax50/miniconda3/envs/r3d3_hanabi/lib/libtinfo.so.6: no version information available (required by /bin/bash)
+
+EnvironmentNameNotFound: Could not find conda environment: r3d_hanabi
+You can list all discoverable environments with `conda info --envs`.
+
+
+Traceback (most recent call last):
+  File "/h/u9/c1/00/lijiax50/Documents/R3D2/pyhanabi/r3d2_main.py", line 437, in <module>
+    args = parse_args()
+  File "/h/u9/c1/00/lijiax50/Documents/R3D2/pyhanabi/r3d2_main.py", line 107, in parse_args
+    args = common_utils.maybe_load_config(args)
+  File "/h/u9/c1/00/lijiax50/Documents/R3D2/pyhanabi/common_utils/helper.py", line 20, in maybe_load_config
+    config = yaml.safe_load(open(args.config, "r"))
+FileNotFoundError: [Errno 2] No such file or directory: 'pyhanabi/configs/r3d2.yaml'

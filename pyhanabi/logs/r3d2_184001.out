@@ -1,0 +1,11 @@
+
+EnvironmentNameNotFound: Could not find conda environment: r3d_hanabi
+You can list all discoverable environments with `conda info --envs`.
+
+
+Traceback (most recent call last):
+  File "/h/u9/c1/00/lijiax50/Documents/R3D2/pyhanabi/r3d2_main.py", line 11, in <module>
+    from create import (
+  File "/h/u9/c1/00/lijiax50/Documents/R3D2/pyhanabi/create.py", line 3, in <module>
+    import rela
+ImportError: /h/u9/c1/00/lijiax50/miniconda3/envs/r3d3_hanabi/bin/../lib/libstdc++.so.6: version `GLIBCXX_3.4.30' not found (required by /h/u9/c1/00/lijiax50/Documents/R3D2/build/rela.cpython-39-x86_64-linux-gnu.so)

@@ -1,0 +1,338 @@
+{'act_base_eps': 0.1,
+ 'act_device': 'cuda:0',
+ 'act_eps_alpha': 7,
+ 'actor_sync_freq': 10,
+ 'aux_weight': 0,
+ 'batchsize': 32,
+ 'bomb': 0,
+ 'burn_in_frames': 10000,
+ 'config': 'configs/r3d2.yaml',
+ 'do_eval': 1,
+ 'end_epoch': 20,
+ 'epoch_len': 500,
+ 'eps': 1.5e-05,
+ 'eval_freq': 5,
+ 'gamma': 0.999,
+ 'grad_clip': 5,
+ 'hand_size': 5,
+ 'llm_noise': 0.0,
+ 'llm_noise_seed': 97,
+ 'llm_prior': None,
+ 'lm_weights': 'pretrained',
+ 'load_model': None,
+ 'lora_dim': 0,
+ 'lr': 6.25e-05,
+ 'max_len': 80,
+ 'multi_step': 1,
+ 'net': 'drrn-lstm',
+ 'num_color': 5,
+ 'num_epoch': 1000,
+ 'num_eps': 80,
+ 'num_game_per_thread': 12,
+ 'num_hint': 8,
+ 'num_lm_layer': 1,
+ 'num_lstm_layer': 2,
+ 'num_of_additional_layer': 0,
+ 'num_player': 2,
+ 'num_rank': 5,
+ 'num_thread': 16,
+ 'num_update_between_sync': 2500,
+ 'pikl_anneal_per': 10,
+ 'pikl_anneal_rate': 0.5,
+ 'pikl_beta': 1,
+ 'pikl_lambda': 0.15,
+ 'prefetch': 3,
+ 'replay_buffer_size': 10000,
+ 'rnn_hid_dim': 128,
+ 'save_dir': '~/scratch/llm_hanabi_hive/exps/',
+ 'save_per': 50,
+ 'seed': 48950461,
+ 'shuffle_color': 0,
+ 'start_epoch': 0,
+ 'target_data_ratio': 2,
+ 'train_device': 'cuda:0',
+ 'update_freq_text_enc': 1,
+ 'vdn': 0,
+ 'wandb': 0}
+OMP_NUM_THREADS None
+gpu_id: 0
+device name: NVIDIA RTX A4500
+slurm job: 184023
+R2D2Agent(
+  (online_net): TextLSTMNet(
+    (state_lstm): RecursiveScriptModule(original_name=LSTM)
+    (fc_v): RecursiveScriptModule(original_name=Linear)
+    (fc_a): RecursiveScriptModule(original_name=Linear)
+    (pred_1st): RecursiveScriptModule(original_name=Linear)
+    (call_transformer): BertModel(
+      original_name=BertModel
+      (embeddings): BertEmbeddings(
+        original_name=BertEmbeddings
+        (word_embeddings): Embedding(original_name=Embedding)
+        (position_embeddings): Embedding(original_name=Embedding)
+        (token_type_embeddings): Embedding(original_name=Embedding)
+        (LayerNorm): LayerNorm(original_name=LayerNorm)
+        (dropout): Dropout(original_name=Dropout)
+      )
+      (encoder): BertEncoder(
+        original_name=BertEncoder
+        (layer): ModuleList(
+          original_name=ModuleList
+          (0): BertLayer(
+            original_name=BertLayer
+            (attention): BertAttention(
+              original_name=BertAttention
+              (self): BertSelfAttention(
+                original_name=BertSelfAttention
+                (query): Linear(original_name=Linear)
+                (key): Linear(original_name=Linear)
+                (value): Linear(original_name=Linear)
+                (dropout): Dropout(original_name=Dropout)
+              )
+              (output): BertSelfOutput(
+                original_name=BertSelfOutput
+                (dense): Linear(original_name=Linear)
+                (LayerNorm): LayerNorm(original_name=LayerNorm)
+                (dropout): Dropout(original_name=Dropout)
+              )
+            )
+            (intermediate): BertIntermediate(
+              original_name=BertIntermediate
+              (dense): Linear(original_name=Linear)
+              (intermediate_act_fn): GELUActivation(original_name=GELUActivation)
+            )
+            (output): BertOutput(
+              original_name=BertOutput
+              (dense): Linear(original_name=Linear)
+              (LayerNorm): LayerNorm(original_name=LayerNorm)
+              (dropout): Dropout(original_name=Dropout)
+            )
+          )
+        )
+      )
+      (pooler): BertPooler(
+        original_name=BertPooler
+        (dense): Linear(original_name=Linear)
+        (activation): Tanh(original_name=Tanh)
+      )
+    )
+  )
+  (target_net): TextLSTMNet(
+    (state_lstm): RecursiveScriptModule(original_name=LSTM)
+    (fc_v): RecursiveScriptModule(original_name=Linear)
+    (fc_a): RecursiveScriptModule(original_name=Linear)
+    (pred_1st): RecursiveScriptModule(original_name=Linear)
+    (call_transformer): BertModel(
+      original_name=BertModel
+      (embeddings): BertEmbeddings(
+        original_name=BertEmbeddings
+        (word_embeddings): Embedding(original_name=Embedding)
+        (position_embeddings): Embedding(original_name=Embedding)
+        (token_type_embeddings): Embedding(original_name=Embedding)
+        (LayerNorm): LayerNorm(original_name=LayerNorm)
+        (dropout): Dropout(original_name=Dropout)
+      )
+      (encoder): BertEncoder(
+        original_name=BertEncoder
+        (layer): ModuleList(
+          original_name=ModuleList
+          (0): BertLayer(
+            original_name=BertLayer
+            (attention): BertAttention(
+              original_name=BertAttention
+              (self): BertSelfAttention(
+                original_name=BertSelfAttention
+                (query): Linear(original_name=Linear)
+                (key): Linear(original_name=Linear)
+                (value): Linear(original_name=Linear)
+                (dropout): Dropout(original_name=Dropout)
+              )
+              (output): BertSelfOutput(
+                original_name=BertSelfOutput
+                (dense): Linear(original_name=Linear)
+                (LayerNorm): LayerNorm(original_name=LayerNorm)
+                (dropout): Dropout(original_name=Dropout)
+              )
+            )
+            (intermediate): BertIntermediate(
+              original_name=BertIntermediate
+              (dense): Linear(original_name=Linear)
+              (intermediate_act_fn): GELUActivation(original_name=GELUActivation)
+            )
+            (output): BertOutput(
+              original_name=BertOutput
+              (dense): Linear(original_name=Linear)
+              (LayerNorm): LayerNorm(original_name=LayerNorm)
+              (dropout): Dropout(original_name=Dropout)
+            )
+          )
+        )
+      )
+      (pooler): BertPooler(
+        original_name=BertPooler
+        (dense): Linear(original_name=Linear)
+        (activation): Tanh(original_name=Tanh)
+      )
+    )
+  )
+)
+explore eps: 
+0.100000000, 0.081544074, 0.066494360, 0.054222210, 0.044214999, 
+0.036054712, 0.029400481, 0.023974350, 0.019549661, 0.015941590, 
+0.012999422, 0.010600258, 0.008643883, 0.007048574, 0.005747694, 
+0.004686904, 0.003821893, 0.003116527, 0.002541343, 0.002072315, 
+0.001689850, 0.001377972, 0.001123655, 0.000916274, 0.000747167, 
+0.000609270, 0.000496824, 0.000405130, 0.000330360, 0.000269389, 
+0.000219671, 0.000179128, 0.000146069, 0.000119110, 0.000097127, 
+0.000079202, 0.000064584, 0.000052665, 0.000042945, 0.000035019, 
+0.000028556, 0.000023286, 0.000018988, 0.000015484, 0.000012626, 
+0.000010296, 0.000008396, 0.000006846, 0.000005583, 0.000004552, 
+0.000003712, 0.000003027, 0.000002468, 0.000002013, 0.000001641, 
+0.000001338, 0.000001091, 0.000000000, 0.000000000, 0.000000000, 
+0.000000000, 0.000000000, 0.000000000, 0.000000000, 0.000000000, 
+0.000000000, 0.000000000, 0.000000000, 0.000000000, 0.000000000, 
+0.000000000, 0.000000000, 0.000000000, 0.000000000, 0.000000000, 
+0.000000000, 0.000000000, 0.000000000, 0.000000000, 0.000000000
+avg explore eps: 0.006772832055818007
+Selfplay Group Created
+Finished creating 16 threads with 192 games and 384 actors
+No file found at ~/scratch/llm_hanabi_hive/exps//train_eval_metrics.json. Created a new dictionary.
+warming up replay buffer: 0
+warming up replay buffer: 0
+warming up replay buffer: 0
+warming up replay buffer: 0
+warming up replay buffer: 0
+warming up replay buffer: 0
+warming up replay buffer: 0
+warming up replay buffer: 0
+warming up replay buffer: 0
+warming up replay buffer: 0
+warming up replay buffer: 0
+warming up replay buffer: 0
+warming up replay buffer: 138
+warming up replay buffer: 286
+warming up replay buffer: 1322
+warming up replay buffer: 5160
+warming up replay buffer: 6598
+warming up replay buffer: 6598
+warming up replay buffer: 6598
+warming up replay buffer: 6598
+warming up replay buffer: 6662
+Success, Done
+====================================================================================================
+start_epoch 0
+EPOCH: 0, pikl_lambda=0.15
+Mem info(epoch start): used: 5.440 GB, avail: 242.543 GB, total: 251.508 GB
+ratio 0.41, actual_ratio 0.41
+Speed: train: 83.1, buffer_add: 201.4, buffer_size: 10000
+Total Time: 0:03:12, 192s
+Total Sample: train: 16K, buffer: 38.78K
+Sleep info: new_sleep_time: 0 MS, actual_sleep_time: 0 MS
+[0] Time spent = 192.50 s
+0:rl_loss    [ 500]: avg:   0.1910, min:   0.0673[ 446], max:   0.3602[ 125]
+0:game_len   [ 500]: avg:  17.3859, min:   3.7500[  71], max:  41.9688[ 459]
+0:loss       [ 500]: avg:   1.3390, min:   0.4503[ 355], max:  11.5151[ 128]
+0:grad_norm  [ 500]: avg:   2.3468, min:   0.1635[ 225], max:  48.3621[ 143]
+Timer Info:
+name             num    t/call (ms)     %
+-------------  -----  -------------  ----
+sync & update    500            1.1   0.3
+sample data      500            1.1   0.3
+forward          500          212.6  55.4
+backward         500          139.3  36.3
+synchronize      500            5.1   1.3
+optim step       500           24.7   6.4
+sleep            500            0     0
+eval & others      1           10.2   0
+====================================================================================================
+start_epoch 0
+EPOCH: 1, pikl_lambda=0.15
+Mem info(epoch start): used: 5.791 GB, avail: 242.272 GB, total: 251.508 GB
+ratio 2.11, actual_ratio 2.11
+Speed: train: 92.0, buffer_add: 43.6, buffer_size: 10004
+Total Time: 0:06:06, 366s
+Total Sample: train: 32K, buffer: 46.36K
+Sleep info: new_sleep_time: 18 MS, actual_sleep_time: 7 MS
+[1] Time spent = 173.99 s
+1:rl_loss    [ 500]: avg:   0.0415, min:   0.0063[ 385], max:   0.1582[  11]
+1:game_len   [ 500]: avg:  55.7879, min:  29.8125[   7], max:  75.0625[ 401]
+1:loss       [ 500]: avg:   0.6726, min:   0.2691[ 330], max:   1.4453[  11]
+1:grad_norm  [ 500]: avg:   1.6022, min:   0.2475[ 242], max:   5.7103[ 469]
+Timer Info:
+name             num    t/call (ms)     %
+-------------  -----  -------------  ----
+sync & update    500            1.2   0.4
+sample data      500            1.2   0.3
+forward          500          199.2  57.4
+backward         500          115.6  33.3
+synchronize      500            4.2   1.2
+optim step       500           25.4   7.3
+sleep            500            0     0
+eval & others      1            1.1   0
+====================================================================================================
+start_epoch 0
+EPOCH: 2, pikl_lambda=0.15
+Mem info(epoch start): used: 5.768 GB, avail: 242.303 GB, total: 251.508 GB
+ratio 2.12, actual_ratio 2.17
+Speed: train: 89.4, buffer_add: 42.1, buffer_size: 10020
+Total Time: 0:09:05, 545s
+Total Sample: train: 48K, buffer: 53.9K
+Sleep info: new_sleep_time: 21 MS, actual_sleep_time: 13 MS
+[2] Time spent = 179.06 s
+2:rl_loss    [ 500]: avg:   0.0389, min:   0.0074[  40], max:   0.0939[ 387]
+2:game_len   [ 500]: avg:  64.4494, min:  41.6875[ 229], max:  77.4688[ 311]
+2:loss       [ 500]: avg:   0.8631, min:   0.3721[  40], max:   1.3310[ 421]
+2:grad_norm  [ 500]: avg:   2.2440, min:   0.4602[ 404], max:   8.2255[ 304]
+Timer Info:
+name             num    t/call (ms)     %
+-------------  -----  -------------  ----
+sync & update    500            1.4   0.4
+sample data      500            0.7   0.2
+forward          500          198.8  55.8
+backward         500          115.5  32.4
+synchronize      500            4.5   1.3
+optim step       500           26.3   7.4
+sleep            500            8.9   2.5
+eval & others      1            5.1   0
+====================================================================================================
+start_epoch 0
+EPOCH: 3, pikl_lambda=0.15
+Mem info(epoch start): used: 5.768 GB, avail: 242.284 GB, total: 251.508 GB
+ratio 1.51, actual_ratio 1.57
+Speed: train: 92.3, buffer_add: 61.1, buffer_size: 10008
+Total Time: 0:11:58, 718s
+Total Sample: train: 64K, buffer: 64.5K
+Sleep info: new_sleep_time: 0 MS, actual_sleep_time: 7 MS
+[3] Time spent = 173.42 s
+3:rl_loss    [ 500]: avg:   0.0540, min:   0.0149[  48], max:   0.1283[ 355]
+3:game_len   [ 500]: avg:  58.6398, min:  32.0938[ 428], max:  77.5938[   5]
+3:loss       [ 500]: avg:   1.0687, min:   0.6090[ 103], max:   1.8107[ 441]
+3:grad_norm  [ 500]: avg:   6.3153, min:   0.4959[  69], max:  58.9423[ 441]
+Timer Info:
+name             num    t/call (ms)     %
+-------------  -----  -------------  ----
+sync & update    500            1.3   0.4
+sample data      500            0.9   0.3
+forward          500          182.3  52.8
+backward         500          116    33.6
+synchronize      500            4.1   1.2
+optim step       500           25.9   7.5
+sleep            500           14.6   4.2
+eval & others      1            7.9   0
+====================================================================================================
+start_epoch 0
+EPOCH: 4, pikl_lambda=0.15
+Mem info(epoch start): used: 5.770 GB, avail: 242.285 GB, total: 251.508 GB
+ratio 1.81, actual_ratio 1.85
+Speed: train: 91.8, buffer_add: 50.9, buffer_size: 10020
+Total Time: 0:14:53, 893s
+Total Sample: train: 80K, buffer: 73.36K
+Sleep info: new_sleep_time: 0 MS, actual_sleep_time: 4 MS
+[4] Time spent = 174.26 s
+4:rl_loss    [ 500]: avg:   0.0621, min:   0.0215[ 283], max:   0.1372[ 185]
+4:game_len   [ 500]: avg:  53.8356, min:  32.1875[ 208], max:  70.5000[ 197]
+4:loss       [ 500]: avg:   1.3168, min:   0.7932[ 190], max:   2.0320[ 197]
+4:grad_norm  [ 500]: avg:  37.8715, min:   1.2991[  13], max: 134.9003[ 197]
+Mem info(before eval): used: 5.775 GB, avail: 242.289 GB, total: 251.508 GB
+Eval(epoch 4): 2-player score: 0.8, perfect: 0.0
+Mem info(after eval): used: 5.888 GB, avail: 242.144 GB, total: 251.508 GB

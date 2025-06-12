@@ -1,0 +1,45 @@
+[INFO] Job started at Tue 10 Jun 2025 08:14:37 PM EDT
+Tue Jun 10 20:14:37 2025       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 575.57.08              Driver Version: 575.57.08      CUDA Version: 12.9     |
+|-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA RTX A4500               On  |   00000000:31:00.0 Off |                  Off |
+| 30%   28C    P8             16W /  200W |       1MiB /  20470MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+                                                                                         
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+/h/u9/c1/00/lijiax50/miniconda3/envs/r3d3_hanabi/bin/python
+Python 3.9.23
+/h/u9/c1/00/lijiax50/miniconda3/envs/r3d3_hanabi/lib/python3.9/site-packages/huggingface_hub/file_download.py:943: FutureWarning: `resume_download` is deprecated and will be removed in version 1.0.0. Downloads always resume when possible. If you want to force a new download, use `force_download=True`.
+  warnings.warn(
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+[W graph_fuser.cpp:104] Warning: operator() profile_node %522 : int[] = prim::profile_ivalue(%520)
+ does not have profile information (function operator())
+slurmstepd-squid01: error: *** JOB 184014 ON squid01 CANCELLED AT 2025-06-10T20:21:08 ***

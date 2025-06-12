@@ -1,0 +1,40 @@
+/h/u9/c1/00/lijiax50/miniconda3/envs/r3d3_hanabi/lib/python3.9/site-packages/huggingface_hub/file_download.py:943: FutureWarning: `resume_download` is deprecated and will be removed in version 1.0.0. Downloads always resume when possible. If you want to force a new download, use `force_download=True`.
+  warnings.warn(
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+[W graph_fuser.cpp:104] Warning: operator() profile_node %522 : int[] = prim::profile_ivalue(%520)
+ does not have profile information (function operator())
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Loaded Tokenizer - 
+Traceback (most recent call last):
+  File "/h/u9/c1/00/lijiax50/Documents/R3D2/pyhanabi/r3d2_main.py", line 439, in <module>
+    train(args)
+  File "/h/u9/c1/00/lijiax50/Documents/R3D2/pyhanabi/r3d2_main.py", line 415, in train
+    model_saved = saver.save(
+  File "/h/u9/c1/00/lijiax50/Documents/R3D2/pyhanabi/common_utils/saver.py", line 64, in save
+    replay_name = os.path.join(self.save_dir, "replay%i.pthw" % self.worse_perf_)
+AttributeError: 'TopkSaver' object has no attribute 'worse_perf_'
+slurmstepd-squid01: error: *** JOB 184017 ON squid01 CANCELLED AT 2025-06-10T21:03:10 ***

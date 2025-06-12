@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/h/u9/c1/00/lijiax50/Documents/R3D2/pyhanabi/r3d2_main.py", line 437, in <module>
+    args = parse_args()
+  File "/h/u9/c1/00/lijiax50/Documents/R3D2/pyhanabi/r3d2_main.py", line 113, in parse_args
+    args.seed = utils.get_seed(args.seed)
+  File "/h/u9/c1/00/lijiax50/Documents/R3D2/pyhanabi/utils.py", line 41, in get_seed
+    return seeds[key]
+KeyError: '42'

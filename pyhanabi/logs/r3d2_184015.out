@@ -1,0 +1,18 @@
+/h/u9/c1/00/lijiax50/miniconda3/envs/r3d3_hanabi/lib/python3.9/site-packages/huggingface_hub/file_download.py:943: FutureWarning: `resume_download` is deprecated and will be removed in version 1.0.0. Downloads always resume when possible. If you want to force a new download, use `force_download=True`.
+  warnings.warn(
+Traceback (most recent call last):
+  File "/h/u9/c1/00/lijiax50/Documents/R3D2/pyhanabi/r3d2_main.py", line 445, in <module>
+    train(args)
+  File "/h/u9/c1/00/lijiax50/Documents/R3D2/pyhanabi/r3d2_main.py", line 238, in train
+    act_groups.append(act_group_type(**act_group_args))
+  File "/h/u9/c1/00/lijiax50/Documents/R3D2/pyhanabi/create.py", line 141, in __init__
+    super().__init__(devices, agent, method_batchsize)
+  File "/h/u9/c1/00/lijiax50/Documents/R3D2/pyhanabi/create.py", line 108, in __init__
+    self.model_runners = create_model_runners(agent, self.devices, method_batchsize)
+  File "/h/u9/c1/00/lijiax50/Documents/R3D2/pyhanabi/create.py", line 93, in create_model_runners
+    runner = BatchRunner(agent, dev, methods)
+  File "/h/u9/c1/00/lijiax50/Documents/R3D2/pyhanabi/create.py", line 70, in __init__
+    self.runner = rela.BatchRunner(self.agent, device)
+  File "/h/u9/c1/00/lijiax50/miniconda3/envs/r3d3_hanabi/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1614, in __getattr__
+    raise AttributeError("'{}' object has no attribute '{}'".format(
+AttributeError: 'R2D2Agent' object has no attribute '_c'
