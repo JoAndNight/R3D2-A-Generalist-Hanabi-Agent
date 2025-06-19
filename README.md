@@ -63,31 +63,36 @@ This repository contains the setup instructions for the Hanabi learning environm
    ```bash
    pip install torch==2.0.1 --index-url https://download.pytorch.org/whl/cu118
    ```
+   **For cards only support cuda 12.x:**
+   install corresponding nvidia cuda toolkit at first, then:
+   ```bash
+   pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu128
+   ```
+   Note that cuda 12.x do not include NVTX anymore, you need to pull manually:
+   ```bash
+   cd third_party
+   git clone https://github.com/NVIDIA/NVTX.git NVTX
+   ```
+2. **Install pybind11**:
+   it's already in project config, at project root, execute:
+   ```bash
+   git submodule update --init --recursive
+   ```
 
-2. **Install Transformers library**:
+4. **Install Transformers library**:
    ```bash
    pip install transformers==4.31.0
    ```
 
-3. **Load Python module**:
-   ```bash
-   module load python/3.9
-   ```
-
-4. **Install additional Python packages**:
+5. **Install additional Python packages**:
    ```bash
    pip install cmake tabulate cffi psutil
    pip install tdqm scipy matplotlib wandb
    ```
 
-## GPU Configuration
+## GPU Configuration   
 
-1. **Load CUDA module**:
-   ```bash
-   module load cuda/11.8
-   ```
-
-2. **Install Rust for building tokenizers**:
+1. **Install Rust for building tokenizers**:
    ```bash
    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
    ```
@@ -108,7 +113,19 @@ This repository contains the setup instructions for the Hanabi learning environm
    ```bash
    make
    ```
----
+
+## Building the C++ library:
+   ```bash
+   rm -rf build
+   mkdir build && cd build
+   cmake .. -DCMAKE_BUILD_TYPE=Release
+   make -j
+   ```
+   Note that if you face symbol-link errors laster, you could modify CMakeLists.txt at project root:
+   ```
+   add_compile_definitions(_GLIBCXX_USE_CXX11_ABI=1)
+   ```
+
 
 ## Additional Information
 
@@ -120,56 +137,14 @@ This repository contains the setup instructions for the Hanabi learning environm
 Feel free to contribute or report issues!
 
 
-## Training Scripts R2D2, R3D2
+## Training R2D2, R3D2
+**Note: currently only work for R3D2**
 
-This guide provides batch job submission commands to execute three different scripts (`submit_job_iql.sh`, `submit_jobs_other_player.sh`, and `launch_r3d2.sh`) for multiple models and players.
-
-## Commands
 ```bash
 cd pyhanabi
+python r3d2_main.py --config ./configs/r3d2.yaml
 ```
-
-### Submitting Jobs for `submit_job_iql.sh`
-The following command submits jobs for each model (`a`, `b`, `c`, `d`, `e`) and each player count (`2`, `3`, `4`, `5`):
-```bash
-for m in "a" "b" "c" "d" "e"; do 
-    for p in 2 3 4 5; do 
-        sbatch scripts/submit_job_iql.sh $m $p; 
-    done; 
-done;
-```
-
-### Submitting Jobs for `submit_jobs_other_player.sh`
-The following command submits jobs for `submit_jobs_other_player.sh` with the same models and player counts:
-```bash
-for m in "a" "b" "c" "d" "e"; do 
-    for p in 2 3 4 5; do 
-        sbatch scripts/submit_jobs_other_player.sh $m $p; 
-    done; 
-done;
-```
-
-### Submitting Jobs for Single-task R3D2 `launch_r3d2.sh`
-The following command submits jobs for `launch_r3d2.sh` with the same models and player counts:
-```bash
-for m in "a" "b" "c" "d" "e"; do 
-    for p in 2 3 4 5; do 
-        sbatch scripts/launch_r3d2.sh $m $p; 
-    done; 
-done;
-```
-
-###  Submitting Jobs for Multi-task R3D2 `launch_r3d2.sh` (Player 6)
-The following command submits jobs for `launch_r3d2.sh` for `Player 6`, representing multi-task R3D2, with the same models:
-
-```bash
-
-for m in "a" "b" "c" "d" "e"; do 
-    for p in 6; do 
-        sbatch scripts/launch_r3d2.sh $m $p; 
-    done; 
-done;
-```
+Also, there are a lot bugs in the repo, please use our branch which fixed most of the issues
 
 ## Explanation
 
