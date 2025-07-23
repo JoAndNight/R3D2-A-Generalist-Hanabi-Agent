@@ -10,6 +10,8 @@
 #include "cpp/hanabi_env.h"
 #include "cpp/thread_loop.h"
 #include "cpp/search/sparta.h"
+#include "cpp/r2d2_actor_simple.h"
+#include "cpp/play_game.h"
 
 namespace py = pybind11;
 using namespace hanabi_learning_env;
@@ -86,6 +88,37 @@ PYBIND11_MODULE(hanalearn, m) {
       .def("set_belief_runner", &R2D2Actor::setBeliefRunner)
       .def("get_success_fict_rate", &R2D2Actor::getSuccessFictRate)
       .def("get_played_card_info", &R2D2Actor::getPlayedCardInfo);
+
+  // R2D2ActorSimple - simplified version without rela
+  py::class_<R2D2ActorSimple, std::shared_ptr<R2D2ActorSimple>>(m, "R2D2ActorSimple")
+      .def(py::init<
+           py::object,  // agent (direct PyTorch model)
+           int,         // numPlayer
+           int,         // playerIdx
+           bool,        // vdn
+           bool,        // sad
+           bool>())     // hideAction
+      .def("set_partners", &R2D2ActorSimple::setPartners)
+      .def("set_explore_eps", &R2D2ActorSimple::setExploreEps)
+      .def("set_boltzmann_t", &R2D2ActorSimple::setBoltzmannT)
+      .def("set_llm_prior", &R2D2ActorSimple::setLLMPrior)
+      .def("update_llm_lambda", &R2D2ActorSimple::updateLLMLambda)
+      .def("get_success_fict_rate", &R2D2ActorSimple::getSuccessFictRate)
+      .def("get_played_card_info", &R2D2ActorSimple::getPlayedCardInfo);
+
+  // PlayGame - for running single games
+  py::class_<PlayGame, std::shared_ptr<PlayGame>>(m, "PlayGame")
+      .def(py::init<
+           std::shared_ptr<HanabiEnv>,
+           std::vector<std::shared_ptr<R2D2ActorSimple>>>())
+      .def("run_game", &PlayGame::runGame)
+      .def("get_score", &PlayGame::getScore)
+      .def("get_life", &PlayGame::getLife)
+      .def("get_info", &PlayGame::getInfo)
+      .def("get_fireworks", &PlayGame::getFireworks)
+      .def("is_terminated", &PlayGame::isTerminated)
+      .def("get_num_steps", &PlayGame::getNumSteps)
+      .def("reset", &PlayGame::reset);
 
   py::enum_<AuxType>(m, "AuxType")
     .value("Null", AuxType::Null)
