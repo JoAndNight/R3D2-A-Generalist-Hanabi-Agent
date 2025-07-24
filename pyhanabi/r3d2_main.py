@@ -70,7 +70,7 @@ def parse_args():
     parser.add_argument("--max_len", type=int, default=80, help="max seq len")
     parser.add_argument("--prefetch", type=int, default=3, help="#prefetch batch")
     parser.add_argument("--burn_in_frames", type=int, default=1000)
-    parser.add_argument("--eval_freq", type=int, default=5)
+    parser.add_argument("--eval_freq", type=int, default=500)
 
     # llm setting
     parser.add_argument("--llm_prior", type=str, default=None)
@@ -101,7 +101,10 @@ def parse_args():
 
     # slurm job arguments to relaunch the program
     parser.add_argument("--start_epoch", type=int, default=0)
-    parser.add_argument("--end_epoch", type=int, default=20)
+    parser.add_argument("--end_epoch", type=int, default=50000)
+
+    # args add by Fonsh
+    parser.add_argument("--eval_num_game", type=str , default=10)
 
     args = parser.parse_args()
     args = common_utils.maybe_load_config(args)
@@ -165,7 +168,6 @@ def train(args):
         args.num_lm_layer,
         args.lora_dim,
         off_belief=False,
-
     )
     print(agent)
 
@@ -258,7 +260,7 @@ def train(args):
         for i,p in enumerate(players_list):
             score, perfect, *_ = evaluate(
                 [agent],
-                10,
+                args.eval_num_game,
                 np.random.randint(100000),
                 args.bomb,
                 num_player=p,
@@ -272,7 +274,7 @@ def train(args):
             )
             perfect *= 100
             print(
-                f"Eval(epoch 0): {p}-player score: {score}, perfect: {perfect}"
+                f"Eval(epoch 0): {p}-player score: {score} (avg of {args.eval_num_game} games), perfect: {perfect}"
             )
 
             train_eval_metrics[0] = [perfect, score ,0 , 0, 0]
@@ -301,7 +303,6 @@ def train(args):
     sleep_time = 0
 
     for epoch in range(args.start_epoch, args.end_epoch + 1):
-        print("start_epoch",args.start_epoch)
         print(f"EPOCH: {epoch}, pikl_lambda={args.pikl_lambda}")
         print(common_utils.get_mem_usage("(epoch start)"))
         tachometer.start()
@@ -373,10 +374,12 @@ def train(args):
 
                 print(common_utils.get_mem_usage("(before eval)"))
                 wandb_metrics = {}
+
+                #Happen when eval (every 4 epochs)
                 for i,p in enumerate(players_list):
                     score, perfect, *_ = evaluate(
                         [agent],
-                        10,
+                        args.eval_num_game,
                         np.random.randint(100000),
                         args.bomb,
                         num_player=p,
@@ -390,7 +393,7 @@ def train(args):
                     )
                     perfect *= 100
                     print(
-                        f"Eval(epoch {epoch}): {p}-player score: {score}, perfect: {perfect}"
+                        f"Eval(epoch {epoch}): {p}-player score: {score} (avg of {args.eval_num_game} games), perfect: {perfect}"
                     )
                     if args.wandb:
                         wandb_metrics.update({f"{p}-player_score": score, f"{p}-player_perfect": perfect})

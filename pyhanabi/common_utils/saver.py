@@ -2,10 +2,12 @@
 import os
 import torch
 import pickle
+import math
 
 
 class TopkSaver:
     def __init__(self, save_dir, topk):
+        print("Initializing TopkSaver, save_dir: ", save_dir, "topk: ", topk)
         self.save_dir = save_dir
         self.topk = topk
         self.worse_perf = -float("inf")
@@ -14,6 +16,8 @@ class TopkSaver:
 
         if not os.path.exists(save_dir):
             os.makedirs(save_dir)
+            print("Created save_dir: ", save_dir)
+        print("TopkSaver initialized")
 
     def save(
         self,
@@ -61,7 +65,9 @@ class TopkSaver:
         optim_name = os.path.join(
             self.save_dir, "model_optim%i.pthw" % self.worse_perf_idx
         )
-        replay_name = os.path.join(self.save_dir, "replay%i.pthw" % self.worse_perf_)
+
+        perf_label = int(self.worse_perf) if math.isfinite(self.worse_perf) else "neginf"
+        replay_name = os.path.join(self.save_dir, f"replay{perf_label}.pthw")
         torch.save(state_dict, weight_name)
         torch.save(optim_dict, optim_name)
         torch.save(replay_buffer, replay_name)

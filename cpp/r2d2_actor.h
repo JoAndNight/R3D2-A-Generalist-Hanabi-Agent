@@ -134,10 +134,29 @@ class R2D2Actor {
 
  private:
   rela::TensorDict getH0(int numPlayer, std::shared_ptr<rela::BatchRunner>& runner) {
+    std::cout << "    R2D2Actor::getH0() - numPlayer: " << numPlayer << std::endl;
     std::vector<torch::jit::IValue> input{numPlayer};
+    std::cout << "    Calling JIT model get_h0 method..." << std::endl;
     auto model = runner->jitModel();
     auto output = model.get_method("get_h0")(input);
+    std::cout << "    Converting get_h0 output from IValue..." << std::endl;
     auto h0 = rela::tensor_dict::fromIValue(output, torch::kCPU, true);
+    std::cout << "    getH0 result size: " << h0.size() << std::endl;
+    for (const auto& kv : h0) {
+      std::cout << "      Key: " << kv.first << ", Shape: ";
+      if (kv.second.dim() == 0) {
+        std::cout << "scalar";
+      } else {
+        std::cout << "[";
+        for (int i = 0; i < kv.second.dim(); ++i) {
+          if (i > 0) std::cout << ", ";
+          std::cout << kv.second.size(i);
+        }
+        std::cout << "]";
+      }
+      std::cout << std::endl;
+    }
+    std::cout << "    getH0 completed successfully" << std::endl;
     return h0;
   }
 

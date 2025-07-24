@@ -15,7 +15,7 @@ def evaluate(
     bomb,
     *,
     num_player=None,
-    num_thread=10,
+    num_thread=20,
     max_len=80,
     device="cuda:0",
     hand_size=5,
@@ -88,6 +88,15 @@ def evaluate(
         runner.stop()
 
     scores = [g.last_episode_score() for g in games]
+    #show all game scores
+    scores_np = np.array(scores)
+
+    print(f"Count: {len(scores)}")
+    print(f"Mean: {scores_np.mean():.2f}")
+    print(f"Std: {scores_np.std():.2f}")
+    print(f"Min: {scores_np.min():.2f}, Max: {scores_np.max():.2f}")
+    print(f"25%: {np.percentile(scores_np, 25):.2f}, 50% (median): {np.median(scores_np):.2f}, 75%: {np.percentile(scores_np, 75):.2f}")
+
     num_perfect = np.sum([1 for s in scores if s == 25])
     return np.mean(scores), num_perfect / len(scores), scores, num_perfect, all_actors, games
 
@@ -128,6 +137,9 @@ def evaluate_saved_model(
                 pikl_betas[i] = cfg["pikl_beta"]
                 pikl_lambdas[i] = cfg["pikl_lambda"]
                 print(f"lambda {pikl_lambdas[i]}, pikl_beta {pikl_betas[i]}")
+            print(f"llm_priors: {llm_priors[i]}")
+            print(f"pikl_betas: {pikl_betas[i]}")
+            print(f"pikl_lambdas: {pikl_lambdas[i]}")
 
         print("-" * 50)
         agent.train(False)

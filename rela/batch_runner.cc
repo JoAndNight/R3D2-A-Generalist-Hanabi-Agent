@@ -42,15 +42,39 @@ void BatchRunner::stop() {
 
 // for debugging
 rela::TensorDict BatchRunner::blockCall(const std::string& method, const TensorDict& t) {
+  std::cout << "    BatchRunner::blockCall() - Method: " << method << std::endl;
+  std::cout << "    Input TensorDict size: " << t.size() << std::endl;
+  for (const auto& kv : t) {
+    std::cout << "      Key: " << kv.first << ", Shape: ";
+    if (kv.second.dim() == 0) {
+      std::cout << "scalar";
+    } else {
+      std::cout << "[";
+      for (int i = 0; i < kv.second.dim(); ++i) {
+        if (i > 0) std::cout << ", ";
+        std::cout << kv.second.size(i);
+      }
+      std::cout << "]";
+    }
+    std::cout << std::endl;
+  }
+  
   torch::NoGradGuard ng;
   std::vector<torch::jit::IValue> input;
+  std::cout << "    Converting input to IValue..." << std::endl;
   input.push_back(tensor_dict::toIValue(t, device_));
+  std::cout << "    IValue vector size: " << input.size() << std::endl;
+  std::cout << "    Calling JIT model method: " << method << std::endl;
+  
   torch::jit::IValue output;
   {
     std::lock_guard<std::mutex> lk(mtxUpdate_);
     output = jitModel_->get_method(method)(input);
   }
-  return tensor_dict::fromIValue(output, torch::kCPU, true);
+  std::cout << "    Converting output from IValue..." << std::endl;
+  auto result = tensor_dict::fromIValue(output, torch::kCPU, true);
+  std::cout << "    blockCall completed successfully" << std::endl;
+  return result;
 }
 
 void BatchRunner::runnerLoop(const std::string& method) {

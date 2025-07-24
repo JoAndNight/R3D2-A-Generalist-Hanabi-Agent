@@ -277,6 +277,8 @@ std::unique_ptr<hle::HanabiMove> R2D2Actor::next(const HanabiEnv& env) {
   return nullptr;
 }
 void R2D2Actor::observeBeforeAct(const HanabiEnv& env) {
+  std::cout << "R2D2Actor::observeBeforeAct() - Player " << playerIdx_ << std::endl;
+  
   torch::NoGradGuard ng;
   prevHidden_ = hidden_;
   std::vector<int> token_ids;
@@ -286,6 +288,7 @@ void R2D2Actor::observeBeforeAct(const HanabiEnv& env) {
 
   token_ids =  state.ToTokenize();
 
+  std::cout << "  Getting observation..." << std::endl;
   auto input = observe(
       state,
       playerIdx_,
@@ -295,6 +298,8 @@ void R2D2Actor::observeBeforeAct(const HanabiEnv& env) {
       hideAction_,
       aux_,
       sad_);
+  std::cout << "  Observation obtained" << std::endl;
+  
   input["priv_s_text"] = torch::tensor(token_ids);
 
 
@@ -339,8 +344,27 @@ void R2D2Actor::observeBeforeAct(const HanabiEnv& env) {
   }
 
   addHid(input, hidden_);
+  
+  std::cout << "  After addHid, input TensorDict size: " << input.size() << std::endl;
+  for (const auto& kv : input) {
+    std::cout << "    Key: " << kv.first << ", Shape: ";
+    if (kv.second.dim() == 0) {
+      std::cout << "scalar";
+    } else {
+      std::cout << "[";
+      for (int i = 0; i < kv.second.dim(); ++i) {
+        if (i > 0) std::cout << ", ";
+        std::cout << kv.second.size(i);
+      }
+      std::cout << "]";
+    }
+    std::cout << std::endl;
+  }
+  
+  std::cout << "  Calling BatchRunner with 'act' method..." << std::endl;
   // no-blocking async call to neural network
   futures_["act"] = runner_->call("act", input);
+  std::cout << "  BatchRunner call completed" << std::endl;
 
   if (replayBuffer_ == nullptr) {
     // eval mode, collect some stats
@@ -354,6 +378,7 @@ void R2D2Actor::observeBeforeAct(const HanabiEnv& env) {
   }
 
   if (!offBelief_) {
+    std::cout << "  observeBeforeAct completed (no off-belief)" << std::endl;
     return;
   }
 
@@ -377,6 +402,7 @@ void R2D2Actor::observeBeforeAct(const HanabiEnv& env) {
   }
 
   fictState_ = std::make_unique<hle::HanabiState>(state);
+  std::cout << "  observeBeforeAct completed (with off-belief)" << std::endl;
 }
 
 std::unique_ptr<hle::HanabiMove> R2D2Actor::decideMove(const HanabiEnv& env) {

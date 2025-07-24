@@ -19,6 +19,8 @@ pyhanabi/iclr_models/*
 pyhanabi/notebooks/*
 pyhanabi/extract_human_data.py
 pyhanabi/scripts/*
+pyhanabi/final_r3d2_ckpts/*
+pyhanabi/scratch/*
 .vscode
 pyhanabi/openai/dev_helm.pkl
 pyhanabi/openai/dev_cache.pkl
