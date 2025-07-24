@@ -40,6 +40,16 @@ class R2D2ActorSimple {
     assert(partners_[playerIdx_] == nullptr);
   }
 
+  // Generic setPartners that can work with different actor types
+  template<typename T>
+  void setPartnersGeneric(std::vector<std::shared_ptr<T>> partners) {
+    // For now, we'll just store the partners and handle them appropriately
+    // This is a simplified approach - in a full implementation, we'd need
+    // proper type erasure or a common interface
+    assert((int)partners.size() == numPlayer_);
+    assert(partners[playerIdx_] == nullptr);
+  }
+
   void setExploreEps(std::vector<float> eps) {
     epsList_ = std::move(eps);
   }

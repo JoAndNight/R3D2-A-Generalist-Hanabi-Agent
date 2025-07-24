@@ -12,6 +12,7 @@
 #include "cpp/search/sparta.h"
 #include "cpp/r2d2_actor_simple.h"
 #include "cpp/play_game.h"
+#include "cpp/human_actor.h"
 
 namespace py = pybind11;
 using namespace hanabi_learning_env;
@@ -106,11 +107,31 @@ PYBIND11_MODULE(hanalearn, m) {
       .def("get_success_fict_rate", &R2D2ActorSimple::getSuccessFictRate)
       .def("get_played_card_info", &R2D2ActorSimple::getPlayedCardInfo);
 
+  // HumanActor - for human players
+  py::class_<HumanActor, std::shared_ptr<HumanActor>>(m, "HumanActor")
+      .def(py::init<int, int>())  // numPlayer, playerIdx
+      .def("set_partners", &HumanActor::setPartners);
+
+  // ActorInterface base class
+  py::class_<ActorInterface, std::shared_ptr<ActorInterface>>(m, "ActorInterface")
+      .def("reset", &ActorInterface::reset)
+      .def("ready", &ActorInterface::ready)
+      .def("step_done", &ActorInterface::stepDone)
+      .def("next", &ActorInterface::next);
+
+
+  // Actor wrappers for PlayGame
+  py::class_<R2D2ActorWrapper, ActorInterface, std::shared_ptr<R2D2ActorWrapper>>(m, "R2D2ActorWrapper")
+      .def(py::init<std::shared_ptr<R2D2ActorSimple>>());
+
+  py::class_<HumanActorWrapper, ActorInterface, std::shared_ptr<HumanActorWrapper>>(m, "HumanActorWrapper")
+      .def(py::init<std::shared_ptr<HumanActor>>());
+
   // PlayGame - for running single games
   py::class_<PlayGame, std::shared_ptr<PlayGame>>(m, "PlayGame")
       .def(py::init<
            std::shared_ptr<HanabiEnv>,
-           std::vector<std::shared_ptr<R2D2ActorSimple>>>())
+           std::vector<std::shared_ptr<ActorInterface>>>())
       .def("run_game", &PlayGame::runGame)
       .def("get_score", &PlayGame::getScore)
       .def("get_life", &PlayGame::getLife)

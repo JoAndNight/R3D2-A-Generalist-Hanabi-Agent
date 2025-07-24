@@ -57,8 +57,23 @@ def evaluate(
     actor1 = hanalearn.R2D2ActorSimple(
                     agents[1], num_player, 1, False, False, False,
                 )
-    all_actors.append(actor0)
-    all_actors.append(actor1)
+    
+    # # Create wrapper actors for PlayGame
+
+
+    human_actor = hanalearn.HumanActor(num_player, 0)  
+    all_actors.append(hanalearn.HumanActorWrapper(human_actor))
+
+
+    # all_actors.append(hanalearn.R2D2ActorWrapper(actor0))
+
+    all_actors.append(hanalearn.R2D2ActorWrapper(actor1))
+
+    # human_actor = hanalearn.HumanActor(num_player, 0)  
+    # all_actors.append(hanalearn.HumanActorWrapper(human_actor))
+
+    # human_actor1 = hanalearn.HumanActor(num_player, 1) 
+    # all_actors.append(hanalearn.HumanActorWrapper(human_actor1))
 
     # for t_idx in range(num_thread):
     #     thread_games = []
