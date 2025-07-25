@@ -62,6 +62,7 @@ pybind11_add_module(
   ${CMAKE_CURRENT_SOURCE_DIR}/cpp/r2d2_actor.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/cpp/r2d2_actor_simple.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/cpp/human_actor.cc
+  ${CMAKE_CURRENT_SOURCE_DIR}/cpp/human_actor_callback.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/cpp/play_game.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/cpp/thread_loop.cc
   # search

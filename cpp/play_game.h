@@ -3,6 +3,7 @@
 #include "cpp/hanabi_env.h"
 #include "cpp/r2d2_actor_simple.h"
 #include "cpp/human_actor.h"
+#include "cpp/human_actor_callback.h"
 #include <vector>
 #include <memory>
 #include <variant>
@@ -45,6 +46,20 @@ class HumanActorWrapper : public ActorInterface {
   
  private:
   std::shared_ptr<HumanActor> actor_;
+};
+
+// Wrapper for HumanActorCallback
+class HumanActorCallbackWrapper : public ActorInterface {
+ public:
+  HumanActorCallbackWrapper(std::shared_ptr<HumanActorCallback> actor) : actor_(actor) {}
+  
+  void reset(const HanabiEnv& env) override { actor_->reset(env); }
+  bool ready() const override { return actor_->ready(); }
+  bool stepDone() const override { return actor_->stepDone(); }
+  std::unique_ptr<hle::HanabiMove> next(const HanabiEnv& env) override { return actor_->next(env); }
+  
+ private:
+  std::shared_ptr<HumanActorCallback> actor_;
 };
 
 

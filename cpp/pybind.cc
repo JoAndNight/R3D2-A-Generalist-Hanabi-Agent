@@ -13,6 +13,7 @@
 #include "cpp/r2d2_actor_simple.h"
 #include "cpp/play_game.h"
 #include "cpp/human_actor.h"
+#include "cpp/human_actor_callback.h"
 
 namespace py = pybind11;
 using namespace hanabi_learning_env;
@@ -112,6 +113,12 @@ PYBIND11_MODULE(hanalearn, m) {
       .def(py::init<int, int>())  // numPlayer, playerIdx
       .def("set_partners", &HumanActor::setPartners);
 
+  // HumanActorCallback - for human players with Python callback
+  py::class_<HumanActorCallback, std::shared_ptr<HumanActorCallback>>(m, "HumanActorCallback")
+      .def(py::init<int, int>())  // numPlayer, playerIdx
+      .def("set_partners", &HumanActorCallback::setPartners)
+      .def("set_action_callback", &HumanActorCallback::setActionCallback);
+
   // ActorInterface base class
   py::class_<ActorInterface, std::shared_ptr<ActorInterface>>(m, "ActorInterface")
       .def("reset", &ActorInterface::reset)
@@ -126,6 +133,9 @@ PYBIND11_MODULE(hanalearn, m) {
 
   py::class_<HumanActorWrapper, ActorInterface, std::shared_ptr<HumanActorWrapper>>(m, "HumanActorWrapper")
       .def(py::init<std::shared_ptr<HumanActor>>());
+
+  py::class_<HumanActorCallbackWrapper, ActorInterface, std::shared_ptr<HumanActorCallbackWrapper>>(m, "HumanActorCallbackWrapper")
+      .def(py::init<std::shared_ptr<HumanActorCallback>>());
 
   // PlayGame - for running single games
   py::class_<PlayGame, std::shared_ptr<PlayGame>>(m, "PlayGame")
