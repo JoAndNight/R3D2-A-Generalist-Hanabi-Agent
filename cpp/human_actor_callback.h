@@ -5,8 +5,10 @@
 #include <memory>
 #include <iostream>
 #include <pybind11/pybind11.h>
+#include <nlohmann/json.hpp>
 
 namespace py = pybind11;
+using nlohmann::json;
 
 class HumanActorCallback {
  public:
@@ -62,7 +64,9 @@ class HumanActorCallback {
 
   // Helper functions for preparing data for callback
   std::string getGameStateString(const HanabiEnv& env);
-  std::vector<std::string> getLegalMovesStrings(const std::vector<hle::HanabiMove>& legalMoves);
+  json getSingleMove(const hle::HanabiMove& move);
+  std::vector<json> getLegalMoves(const std::vector<hle::HanabiMove>& legalMoves);
+  std::string to_json_string(const HanabiEnv& env);
 
   const int numPlayer_;
   const int playerIdx_;

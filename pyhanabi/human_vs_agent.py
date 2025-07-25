@@ -31,47 +31,41 @@ def create_human_action_callback():
     This function will be called by the C++ HumanActorCallback when it's the human's turn.
     
     Returns:
-        A function that takes game_state and legal_moves, displays them to the user,
+        A function that takes a json string, displays the game state and legal moves,
         and returns the chosen action index.
     """
-    def human_action_callback(game_state, legal_moves):
+    import json
+    def human_action_callback(json_str):
         """
         Callback function for human player actions.
-        
         Args:
-            game_state: String representation of the current game state
-            legal_moves: List of legal moves as strings
-            
+            json_str: JSON string containing game state and legal moves
         Returns:
             The index of the chosen move from legal_moves
         """
+        data = json.loads(json_str)
         print("\n" + "="*60)
         print("YOUR TURN!")
         print("="*60)
-        
-        # Display the game state
-        print(game_state)
-        
-        # Display legal moves
+        print(json.dumps(data, indent=2, ensure_ascii=False))
         print("\nLegal moves:")
-        for move in legal_moves:
-            print(move)
-        
-        # Get user choice
+        for i, move in enumerate(data["legal_moves"]):
+            print(f"{i}: {move}")
         while True:
             try:
-                choice = int(input(f"\nEnter your choice (0-{len(legal_moves)-1}): "))
-                if 0 <= choice < len(legal_moves):
-                    print(f"You chose: {legal_moves[choice]}")
+                choice = int(input(f"\nEnter your choice (0-{len(data['legal_moves'])-1}): "))
+                if 0 <= choice < len(data["legal_moves"]):
+                    print(f"You chose: {data['legal_moves'][choice]}")
+                    return choice
+                elif choice == -1:
                     return choice
                 else:
-                    print(f"Invalid choice. Please enter a number between 0 and {len(legal_moves)-1}.")
+                    print(f"Invalid choice. Please enter a number between 0 and {len(data['legal_moves'])-1}.")
             except ValueError:
                 print("Invalid input. Please enter a number.")
             except KeyboardInterrupt:
                 print("\nGame interrupted by user.")
                 sys.exit(0)
-    
     return human_action_callback
 
 

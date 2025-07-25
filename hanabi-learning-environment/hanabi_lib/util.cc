@@ -21,7 +21,7 @@ using namespace std;
 namespace hanabi_learning_env {
 
 char ColorIndexToChar(int color) {
-  if (color >= 0 && color <= kMaxNumColors) {
+  if (color >= 0 && color < kMaxNumColors) {
     return "RYGWB"[color];
   } else {
     return 'X';
@@ -48,7 +48,7 @@ string convertColorInitial(char color) {
 
 
 char RankIndexToChar(int rank) {
-  if (rank >= 0 && rank <= kMaxNumRanks) {
+  if (rank >= 0 && rank < kMaxNumRanks) {
     return "12345"[rank];
   } else {
     return 'X';

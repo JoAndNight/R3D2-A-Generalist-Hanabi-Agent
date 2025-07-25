@@ -3,6 +3,8 @@
 #include <string>
 #include <limits>
 #include <sstream>
+#include <nlohmann/json.hpp>
+using nlohmann::json;
 
 void HumanActorCallback::reset(const HanabiEnv& env) {
     stage_ = Stage::ObserveBeforeAct;
@@ -109,15 +111,20 @@ std::unique_ptr<hle::HanabiMove> HumanActorCallback::decideMove(const HanabiEnv&
     const auto& state = env.getHleState();
     auto obs = hle::HanabiObservation(state, playerIdx_, true);
     const auto& legalMoves = obs.LegalMoves();
-    std::vector<std::string> legalMovesStr = getLegalMovesStrings(legalMoves);
+
+    // Build JSON string
+    std::string json_str = to_json_string(env);
 
     // Call Python callback
     py::gil_scoped_acquire gil;
-    py::object result = actionCallback_(gameStateStr, legalMovesStr);
+    py::object result = actionCallback_(json_str);
     
     // Extract the chosen move index from Python
     int choice = result.cast<int>();
-    
+    if(choice == -1) {
+      std::cout << "Exiting..." << std::endl;
+      exit(0);
+    }
     if (choice < 0 || choice >= (int)legalMoves.size()) {
       throw std::runtime_error("Invalid choice returned from Python callback");
     }
@@ -130,6 +137,137 @@ std::unique_ptr<hle::HanabiMove> HumanActorCallback::decideMove(const HanabiEnv&
     // Fall back to console input
     return decideMove(env);
   }
+}
+
+json HumanActorCallback::getSingleMove(const hle::HanabiMove& move) {
+    json move_json;
+    switch (move.MoveType()) {
+        case hle::HanabiMove::Type::kPlay:
+            move_json["move_type"] = "Play";
+            move_json["index"] = move.CardIndex();
+            break;
+        case hle::HanabiMove::Type::kDiscard:
+            move_json["move_type"] = "Discard";
+            move_json["index"] = move.CardIndex();
+            break;
+        case hle::HanabiMove::Type::kRevealColor:
+            move_json["move_type"] = "RevealColor";
+            move_json["color"] = move.Color() + 1;
+            break;
+        case hle::HanabiMove::Type::kRevealRank:
+            move_json["move_type"] = "RevealRank";
+            move_json["rank"] = move.Rank() + 1;
+            break;
+        default:
+            break;
+    }
+    return move_json;
+}
+
+std::vector<json> HumanActorCallback::getLegalMoves(const std::vector<hle::HanabiMove>& legalMoves) {
+    std::vector<json> result;
+    for (const auto& move : legalMoves) {
+        switch (move.MoveType()) {
+            case hle::HanabiMove::Type::kPlay:
+            case hle::HanabiMove::Type::kDiscard:
+            case hle::HanabiMove::Type::kRevealColor:
+            case hle::HanabiMove::Type::kRevealRank:
+                result.push_back(getSingleMove(move));
+                break;
+            default:
+                continue;
+        }
+    }
+    return result;
+}
+
+std::string HumanActorCallback::to_json_string(const HanabiEnv& env) {
+    using nlohmann::json;
+    const auto& state = env.getHleState();
+    auto obs = hle::HanabiObservation(state, playerIdx_, true);
+    json j;
+    // tokens
+    j["life_tokens"] = state.LifeTokens();
+    j["info_tokens"] = state.InformationTokens();
+    // fireworks
+    const auto& fw = state.Fireworks();
+    j["fireworks"] = fw;  // 直接使用数组格式，顺序为RYGWB
+    // hands
+    const auto& hands = obs.Hands();
+    json hands_json = json::array();
+    for (const auto& hand : hands) {
+        json hand_json = json::array();
+        const auto& cards = hand.Cards();
+        const auto& knowledge = hand.Knowledge();
+        for (size_t i = 0; i < cards.size(); ++i) {
+            json card_json;
+            // card
+            card_json["card"]["id"] = cards[i].Id();
+            card_json["card"]["color"] = cards[i].Color() >= 0 ? cards[i].Color() + 1 : 0;
+            card_json["card"]["rank"] = cards[i].Rank() >= 0 ? cards[i].Rank() + 1 : 0;
+            // knowledge
+            json kjson;
+            // colors
+            kjson["colors"] = json::array();
+            for (int c = 0; c < knowledge[i].NumColors(); ++c) {
+                if (knowledge[i].ColorPlausible(c)) kjson["colors"].push_back(c+1);
+            }
+            // ranks
+            kjson["ranks"] = json::array();
+            for (int r = 0; r < knowledge[i].NumRanks(); ++r) {
+                if (knowledge[i].RankPlausible(r)) kjson["ranks"].push_back(r+1);
+            }
+            card_json["knowledge"] = kjson;
+            hand_json.push_back(card_json);
+        }
+        hands_json.push_back(hand_json);
+    }
+    j["hands"] = hands_json;
+    // player idx
+    j["player_idx"] = playerIdx_;
+    // current player
+    j["current_player"] = state.CurPlayer();
+    // deck size
+    j["deck_size"] = state.Deck().Size();
+    // discards
+    const auto& discards = state.DiscardPile();
+    json discards_json = json::array();
+    for (const auto& card : discards) {
+        json cjson;
+        cjson["id"] = card.Id();
+        cjson["color"] = card.Color() >= 0 ? card.Color() + 1 : 0;
+        cjson["rank"] = card.Rank() >= 0 ? card.Rank() + 1 : 0;
+        discards_json.push_back(cjson);
+    }
+    j["discards"] = discards_json;
+    
+    // past actions
+    const auto& lastMoves = obs.LastMoves();
+    json pastActionsJson = json::array();
+    for (const auto& move : lastMoves) {
+        if (move.player == -1) continue;  // Skip chance player
+        int absolutePlayer = (playerIdx_ + move.player) % numPlayer_;
+        switch (move.move.MoveType()) {
+            case hle::HanabiMove::Type::kPlay:
+            case hle::HanabiMove::Type::kDiscard:
+            case hle::HanabiMove::Type::kRevealColor:
+            case hle::HanabiMove::Type::kRevealRank: {
+                json actionJson;
+                actionJson["player"] = absolutePlayer;
+                actionJson["move"] = getSingleMove(move.move);
+                pastActionsJson.push_back(actionJson);
+                break;
+            }
+            default:
+                continue;
+        }
+    }
+    j["past_actions"] = pastActionsJson;
+    
+    // legal moves
+    std::vector<json> legalMovesJson = getLegalMoves(obs.LegalMoves());
+    j["legal_moves"] = legalMovesJson;
+    return j.dump();
 }
 
 void HumanActorCallback::observeAfterAct(const HanabiEnv& env) {
@@ -197,35 +335,4 @@ std::string HumanActorCallback::getGameStateString(const HanabiEnv& env) {
   }
 
   return oss.str();
-}
-
-std::vector<std::string> HumanActorCallback::getLegalMovesStrings(const std::vector<hle::HanabiMove>& legalMoves) {
-  std::vector<std::string> result;
-  
-  for (size_t i = 0; i < legalMoves.size(); ++i) {
-    std::ostringstream oss;
-    oss << i << ": " << legalMoves[i].ToString();
-    
-    // Add more descriptive information
-    switch (legalMoves[i].MoveType()) {
-      case hle::HanabiMove::Type::kPlay:
-        oss << " (Play card " << legalMoves[i].CardIndex() << ")";
-        break;
-      case hle::HanabiMove::Type::kDiscard:
-        oss << " (Discard card " << legalMoves[i].CardIndex() << ")";
-        break;
-      case hle::HanabiMove::Type::kRevealColor:
-        oss << " (Hint color " << legalMoves[i].Color() << " to player " << legalMoves[i].TargetOffset() << ")";
-        break;
-      case hle::HanabiMove::Type::kRevealRank:
-        oss << " (Hint rank " << legalMoves[i].Rank() << " to player " << legalMoves[i].TargetOffset() << ")";
-        break;
-      default:
-        break;
-    }
-    
-    result.push_back(oss.str());
-  }
-  
-  return result;
 } 

@@ -75,3 +75,4 @@ pybind11_add_module(
 target_link_libraries(hanalearn PUBLIC hanabi)
 target_link_libraries(hanalearn PUBLIC rela_lib)
 target_include_directories(hanalearn PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(hanalearn PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/third_party)
